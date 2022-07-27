@@ -582,7 +582,8 @@ func TestRowScanner_Scan_invalidStructDestination_returnsErr(t *testing.T) {
 				Foo int
 				Bar string
 			}{},
-			expectedErr: "scany: scan row into struct fields: can't scan into dest[0]: unable to assign to *int",
+			expectedErr: "scany: scan row into struct fields: can't scan into dest[0]: " +
+				"cannot scan text (OID 25) in text format into *int",
 		},
 		{
 			name: "non struct embedded field",
@@ -730,8 +731,9 @@ func TestRowScanner_Scan_invalidMapDestination_returnsErr(t *testing.T) {
 			query: `
 				SELECT 'foo val' AS foo
 			`,
-			dst:         &map[string]int{},
-			expectedErr: "scany: scan rows into map: can't scan into dest[0]: unable to assign to *int",
+			dst: &map[string]int{},
+			expectedErr: "scany: scan rows into map: can't scan into dest[0]: " +
+				"cannot scan text (OID 25) in text format into *int",
 		},
 	}
 	for _, tc := range cases {
@@ -822,7 +824,8 @@ func TestRowScanner_Scan_primitiveTypeDestinationDoesNotMatchWithColumnType_retu
 		SELECT 'foo val' AS foo
 	`
 	rows := queryRows(t, query)
-	expectedErr := "scany: scan row value into a primitive type: can't scan into dest[0]: unable to assign to *int"
+	expectedErr := "scany: scan row value into a primitive type: " +
+		"can't scan into dest[0]: cannot scan text (OID 25) in text format into *int"
 	dst := new(int)
 	err := scan(t, dst, rows)
 	assert.EqualError(t, err, expectedErr)
