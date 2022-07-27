@@ -86,7 +86,7 @@ linters-settings:
   gocyclo:
     min-complexity: 15
   godot:
-    check-all: true
+    scope: declarations
   goimports:
     local-prefixes: github.com/georgysavva/scany
   golint:
